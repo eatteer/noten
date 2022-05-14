@@ -1,7 +1,7 @@
 import { Category } from "../../entities/Category"
 import { CATEGORIES_ADD, CATEGORIES_LOAD } from "./types"
 
-export const loadCategories = (categories: Category[]) => {
+export const initCategories = (categories: Category[]) => {
   return {
     type: CATEGORIES_LOAD,
     payload: categories

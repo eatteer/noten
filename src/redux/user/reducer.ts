@@ -5,10 +5,10 @@ export const userReducer = (state: User | null = null, action: any) => {
   switch (action.type) {
     case USER_LOGIN:
       const user = action.payload
-      // localStorage.setItem('user', JSON.stringify(user))
+      localStorage.setItem('user', JSON.stringify(user))
       return user
     case USER_LOGOUT:
-      // localStorage.removeItem('user')
+      localStorage.removeItem('user')
       return null
     default:
       return state

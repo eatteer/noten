@@ -27,6 +27,8 @@ export const CategoriesModal: React.FC<Props> = ({
   closeModal,
   setCategory,
 }) => {
+  console.log('Rendering CategoriesModal')
+
   const [categoryName, setCategoryName] = useState('')
   const [categories, setCategories] = useState<Category[]>([])
 
@@ -41,11 +43,11 @@ export const CategoriesModal: React.FC<Props> = ({
     if (isOpen) setCategories(categoriesInStore)
   }, [isOpen])
 
-  const onChangeValue: ChangeEventHandler<HTMLInputElement> = (event) => {
+  const handleOnChange: ChangeEventHandler<HTMLInputElement> = (event) => {
     setCategoryName(event.target.value)
   }
 
-  const onKeyUp = () => {
+  const handleOnKeyUp = () => {
     clearTimeout(timer.current)
     timer.current = setTimeout(() => {
       const filteredCategories = categoriesInStore.filter((category) =>
@@ -87,8 +89,8 @@ export const CategoriesModal: React.FC<Props> = ({
           name='keyword'
           placeholder='Enter category name'
           value={categoryName}
-          onChange={onChangeValue}
-          onKeyUp={onKeyUp}
+          onChange={handleOnChange}
+          onKeyUp={handleOnKeyUp}
         />
         {categories.length === 0 && (
           <div

@@ -22,6 +22,24 @@ export const createNote = async (accessToken: string, createNoteDto: CreateNoteD
   return note
 }
 
+export const findManyByCategory = async (accessToken: string, categoryId: number): Promise<Note[]> => {
+  const endpoint = `${URL_API}/notes?categoryId=${categoryId}`
+  const response = await fetch(endpoint, {
+    method: 'GET',
+    headers: {
+      'Authorization': `Bearer ${accessToken}`
+    },
+  })
+  if (!response.ok) {
+    const error = await response.json()
+    throw new Error(error.message, { cause: error })
+
+  }
+  const note = await response.json() as Note[]
+  return note
+}
+
+
 export const findAllNotes = async (accessToken: string): Promise<Note[]> => {
   const endpoint = `${URL_API}/notes`
   const response = await fetch(endpoint, {

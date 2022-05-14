@@ -23,7 +23,7 @@ export const Drawer: React.FC<Props> = ({ isOpen, closeDrawer, children }) => {
         z-10
         fixed top-0 left-0 bottom-0 right-0
         ${isVisible}
-        ease-in duration-300 touch-none
+        ease-in duration-500 touch-none
       bg-[#111111bd] backdrop-blur-sm
       `}
     >
@@ -32,7 +32,7 @@ export const Drawer: React.FC<Props> = ({ isOpen, closeDrawer, children }) => {
           w-72 h-full
           overflow-y-auto
           ${isOverlayVisible}
-          ease-in-out duration-300 
+          ease-in-out duration-500 
         bg-white rounded-tr-xl rounded-br-xl
         `}
       >

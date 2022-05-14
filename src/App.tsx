@@ -9,43 +9,53 @@ import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { User } from './entities/User'
 import { findAllCategories } from './services/categories-service'
-import { loadCategories } from './redux/categories/action-creators'
+import { initCategories } from './redux/categories/action-creators'
 import { AppStore } from './redux/store'
-import { Topbar } from './components/Topbar'
+import { RequireAuth } from './router/RequireAuth'
+import { findAllNotes } from './services/notes-services'
+import { loadNotes } from './redux/notes/action-creators'
 
 function App() {
   console.log('Rendering App')
   const user = useSelector<AppStore, User>((store) => store.user)
   const dispatch = useDispatch()
 
+  /* Init user from local storage */
   useEffect(() => {
     const rawUser = localStorage.getItem('user')
     if (rawUser) {
-      const _fetch = async () => {
+      const _ = async () => {
         const user = JSON.parse(rawUser) as User
         dispatch(loginUser(user))
-        const categories = await findAllCategories(user.accessToken)
-        dispatch(loadCategories(categories))
       }
-      _fetch()
+      _()
     }
   }, [])
 
+  /* Once user is loaded, get their categories and all notes */
   useEffect(() => {
     if (user) {
-      const _fetch = async () => {
+      const _ = async function () {
         const categories = await findAllCategories(user.accessToken)
-        dispatch(loadCategories(categories))
+        const notes = await findAllNotes(user.accessToken)
+        dispatch(initCategories(categories))
+        dispatch(loadNotes(notes))
       }
-      _fetch()
+      _()
     }
   }, [user])
 
   return (
     <>
-      <Topbar />
       <Routes>
-        <Route path='/' element={<Home />} />
+        <Route
+          path='/'
+          element={
+            <RequireAuth>
+              <Home />
+            </RequireAuth>
+          }
+        />
         <Route path='/signin' element={<SignIn />} />
         <Route path='/signup' element={<SignUp />} />
       </Routes>

@@ -27,7 +27,7 @@ export const Modal: React.FC<Props> = ({ isOpen, closeModal, children }) => {
         z-20
         fixed top-0 left-0 bottom-0 right-0
         ${isVisible}
-        ease-in duration-300
+        ease-in duration-500
         touch-none
         bg-[#8d7979bd] backdrop-blur-sm
       `}
@@ -39,7 +39,7 @@ export const Modal: React.FC<Props> = ({ isOpen, closeModal, children }) => {
           fixed bottom-0
           w-screen
           ${isOverlayVisible}
-          ease-in-out duration-300 
+          ease-in-out duration-500 
         `}
       >
         <div

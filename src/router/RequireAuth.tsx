@@ -1,4 +1,3 @@
-import { useSelector } from 'react-redux'
 import { Navigate } from 'react-router-dom'
 
 type Props = {
@@ -6,12 +5,9 @@ type Props = {
 }
 
 export const RequireAuth: React.FC<Props> = ({ children }) => {
-  const user = useSelector<any, any>((store) => store.user)
-  console.log(user)
-  
-  if (!user) {
+  if (!localStorage.getItem('user')) {
     return <Navigate to='/signin' />
   }
 
-  return children;
+  return children
 }
