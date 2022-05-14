@@ -11,10 +11,11 @@ import { User } from './entities/User'
 import { findAllCategories } from './services/categories-service'
 import { loadCategories } from './redux/categories/action-creators'
 import { AppStore } from './redux/store'
+import { Topbar } from './components/Topbar'
 
 function App() {
   console.log('Rendering App')
-  const user = useSelector<AppStore, User>(store => store.user)
+  const user = useSelector<AppStore, User>((store) => store.user)
   const dispatch = useDispatch()
 
   useEffect(() => {
@@ -42,6 +43,7 @@ function App() {
 
   return (
     <>
+      <Topbar />
       <Routes>
         <Route path='/' element={<Home />} />
         <Route path='/signin' element={<SignIn />} />

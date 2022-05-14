@@ -33,17 +33,22 @@ export const CreateNoteModal: React.FC<Props> = ({ isOpen, closeModal }) => {
           const createNoteDto: CreateNoteDto = {
             title,
             description,
-            categoryId: category!.id
+            categoryId: category?.id || null
           }
+          console.log(createNoteDto)
           const note = await createNote(user.accessToken, createNoteDto)
         } catch (error) {
           console.error(error)
         }
       }}
     >
-      {() => (
+      {({resetForm}) => (
         <>
-          <Modal isOpen={isOpen} closeModal={closeModal}>
+          <Modal isOpen={isOpen} closeModal={()=> {
+            closeModal()
+            resetForm()
+            setCategory(null)
+          }}>
             <Form className='flex flex-col h-96'>
               <Field
                 className='w-full p-4 pb-0 outline-none text-xl font-bold text-slate-600'
@@ -59,12 +64,12 @@ export const CreateNoteModal: React.FC<Props> = ({ isOpen, closeModal }) => {
               <div className='flex items-center p-4 '>
                 <MdLabelOutline className='mr-4' size={24} />
                 <p className='text-xl font-bold'>
-                  {category?.name ?? 'No category?'}
+                  {category?.name ?? 'No category'}
                 </p>
               </div>
               <div className='flex items-center justify-between p-4 border-t border-slate-300'>
                 <BsThreeDotsVertical size={24} onClick={openCategoriesModal} />
-                <button className='button primary'>Save note</button>
+                <button className='button primary' type='submit'>Save note</button>
               </div>
             </Form>
           </Modal>

@@ -26,7 +26,6 @@ export const Home = () => {
 
   return (
     <>
-      <Topbar />
       <div className='grid grid-cols-2 gap-2 p-4'>
         {notes.map((note) => (
           <div key={note.id} className='p-2 border rounded-md border-slate-300'>

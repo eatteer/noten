@@ -97,6 +97,11 @@ export const Topbar: React.FC = () => {
               Categories
             </h2>
             <div>
+              <Tile
+                icon={<MdLabelOutline size={24} />}
+                title='No category'
+                onClick={() => {}}
+              />
               {categories.map((category: Category) => (
                 <Tile
                   key={category.id}
