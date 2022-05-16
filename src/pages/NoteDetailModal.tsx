@@ -1,66 +1,40 @@
-import { useEffect, useState } from 'react'
 import { Field, Form, Formik } from 'formik'
-import { useDispatch, useSelector } from 'react-redux'
-import { CreateNoteDto } from '../dto/CreateNoteDto'
-import { Category } from '../entities/Category'
-import { createNote } from '../services/notes-services'
-import useModal from '../hooks/useModal'
-import { Modal } from '../components/Modal'
-import { CategoriesModal } from './CategoriesModal'
-import { AppStore } from '../redux/store'
-import { addNote } from '../redux/notes/action-creators'
+import { useEffect, useState } from 'react'
 import { IoIosAddCircleOutline } from 'react-icons/io'
 import { MdLabelOutline } from 'react-icons/md'
+import { Modal } from '../components/Modal'
+import { CreateNoteDto } from '../dto/CreateNoteDto'
+import { Category } from '../entities/Category'
+import { Note } from '../entities/Note'
+import useModal from '../hooks/useModal'
+import { CategoriesModal } from './CategoriesModal'
 
 type Props = {
+  note: Note | null
   isOpen: boolean
   closeModal: () => void
 }
 
-export const CreateNoteModal: React.FC<Props> = ({ isOpen, closeModal }) => {
-  console.log('Rendering CreateNoteModal')
-
+export const NoteDetail: React.FC<Props> = ({ note, isOpen, closeModal }) => {
+  const [title, setTitle] = useState('')
   const [category, setCategory] = useState<Category | null>(null)
-
-  const store = useSelector<AppStore, AppStore>((store) => store)
-  const { user, categoryFilter, categories } = store
-  const dispatch = useDispatch()
-
-  /* 
-    Modal is always mounted, this is necesary because of the animations.
-    That's why it's necessary control when it's open to reset the form values
-  */
-  useEffect(() => {
-    /* 
-      Set category to categoryFilter if selected any
-      or null if selected all notes from drawer
-    */
-    if (isOpen) {
-      /*
-        All user have the default category others
-      */
-      const defaultCategory = categories.find(
-        (category) => category.name === 'Others'
-      )!
-      const category = categoryFilter ?? defaultCategory
-      setCategory(category)
-    }
-  }, [isOpen])
-
   const {
     isOpen: isOpenCategoriesModal,
     openModal: openCategoriesModal,
     closeModal: closeCategoriesModal,
   } = useModal()
 
-  const handleCloseModal = (resetForm: () => void) => {
-    resetForm()
-    closeModal()
-  }
+  useEffect(() => {
+    if (isOpen && note) {
+      console.log('isOpen')
+      setTitle(note.title)
+      setCategory(note.category)
+    }
+  }, [isOpen])
 
   return (
     <Formik
-      initialValues={{ title: '', description: '' }}
+      initialValues={{ title: title, description: note?.description }}
       validate={({ title, description }) => {
         let errors: any = {}
         if (!title) {
@@ -72,30 +46,30 @@ export const CreateNoteModal: React.FC<Props> = ({ isOpen, closeModal }) => {
         return errors
       }}
       onSubmit={async ({ title, description }, { resetForm }) => {
-        try {
-          const createNoteDto: CreateNoteDto = {
-            title,
-            description,
-            categoryId: category?.id || 1,
-          }
-          console.log(createNoteDto)
-          const note = await createNote(user.accessToken, createNoteDto)
-          /* 
-            If category of note that is being created matchs with the current global categoryFilter
-            then add the note to current global displaying notes
-            */
-          if (category === categoryFilter) {
-            dispatch(addNote(note))
-          }
-          handleCloseModal(resetForm)
-        } catch (error) {
-          console.error(error)
-        }
+        // try {
+        //   const createNoteDto: CreateNoteDto = {
+        //     title,
+        //     description,
+        //     categoryId: category?.id || 1,
+        //   }
+        //   console.log(createNoteDto)
+        //   const note = await createNote(user.accessToken, createNoteDto)
+        //   /*
+        //     If category of note that is being created matchs with the current global categoryFilter
+        //     then add the note to current global displaying notes
+        //     */
+        //   if (category === categoryFilter) {
+        //     dispatch(addNote(note))
+        //   }
+        //   handleCloseModal(resetForm)
+        // } catch (error) {
+        //   console.error(error)
+        // }
       }}
     >
       {({ resetForm }) => (
         <>
-          <Modal isOpen={isOpen} closeModal={() => handleCloseModal(resetForm)}>
+          <Modal isOpen={isOpen} closeModal={closeModal}>
             <Form className='flex flex-col h-96'>
               <Field name='title'>
                 {({ field, form, meta }: any) => (

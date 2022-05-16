@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { IoIosAdd } from 'react-icons/io'
 import { useDispatch, useSelector } from 'react-redux'
 import { Topbar } from '../components/Topbar'
@@ -8,9 +8,13 @@ import { AppStore } from '../redux/store'
 import { findAllNotes, findManyByCategory } from '../services/notes-services'
 import { CreateNoteModal } from './CreateNoteModal'
 import Masonry from 'react-masonry-css'
+import { Note } from '../entities/Note'
+import { NoteDetail } from './NoteDetailModal'
 
 export const Home = () => {
   console.log('Rendering Home')
+
+  const [note, setNote] = useState<Note | null>(null)
 
   const store = useSelector<AppStore, AppStore>((store) => store)
   const { user, categoryFilter, notes } = store
@@ -19,6 +23,11 @@ export const Home = () => {
     isOpen: isOpenCreateNoteModal,
     openModal: openModalCreateNotaModal,
     closeModal: closeModalCreateNoteModal,
+  } = useModal()
+  const {
+    isOpen: isOpenNoteDetailModal,
+    openModal: openNoteDetailModal,
+    closeModal: closeNoteDetailModal,
   } = useModal()
 
   useEffect(() => {
@@ -51,6 +60,11 @@ export const Home = () => {
     }
   }, [categoryFilter])
 
+  const handleSetNote = (note: Note) => {
+    setNote(note)
+    openNoteDetailModal()
+  }
+
   return (
     <>
       {user && (
@@ -63,6 +77,7 @@ export const Home = () => {
                 <div
                   key={note.id}
                   className='mb-2 last:mb-0 p-2 border rounded-md border-slate-300'
+                  onClick={() => handleSetNote(note)}
                 >
                   <p className='text-sm font-bold'>{note.title}</p>
                   <p className='text-sm'>{note.description}</p>
@@ -82,6 +97,11 @@ export const Home = () => {
             isOpen={isOpenCreateNoteModal}
             closeModal={closeModalCreateNoteModal}
           />
+          {/* <NoteDetail
+            note={note}
+            isOpen={isOpenNoteDetailModal}
+            closeModal={closeNoteDetailModal}
+          /> */}
         </>
       )}
     </>

@@ -6,15 +6,15 @@ import {
   useRef,
   useState,
 } from 'react'
-import { IoIosAdd } from 'react-icons/io'
-import { MdLabelOutline } from 'react-icons/md'
 import { useDispatch, useSelector } from 'react-redux'
-import { Modal } from '../components/Modal'
 import { CreateCategoryDto } from '../dto/CreateCategoryDto'
 import { Category } from '../entities/Category'
-import { addCategory } from '../redux/categories/action-creators'
 import { AppStore } from '../redux/store'
+import { Modal } from '../components/Modal'
+import { addCategory } from '../redux/categories/action-creators'
 import { createCategory } from '../services/categories-service'
+import { IoIosAdd } from 'react-icons/io'
+import { MdLabelOutline } from 'react-icons/md'
 
 type Props = {
   isOpen: boolean
