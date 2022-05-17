@@ -13,35 +13,34 @@ import { initCategories } from './redux/categories/action-creators'
 import { AppStore } from './redux/store'
 import { RequireAuth } from './router/RequireAuth'
 import { findAllNotes } from './services/notes-services'
-import { loadNotes } from './redux/notes/action-creators'
+import { addNotes } from './redux/notes/action-creators'
+import { Categories } from './pages/Categories'
 
 function App() {
-  console.log('Rendering App')
-  const user = useSelector<AppStore, User>((store) => store.user)
+  // console.log('Rendering App') 
+  const user = useSelector<AppStore, User | null>((store) => store?.user)
   const dispatch = useDispatch()
 
-  /* Init user from local storage */
+  /* Load user from local storage */
   useEffect(() => {
     const rawUser = localStorage.getItem('user')
     if (rawUser) {
-      const _ = async () => {
+      ;(async function () {
         const user = JSON.parse(rawUser) as User
         dispatch(loginUser(user))
-      }
-      _()
+      })()
     }
   }, [])
 
-  /* Once user is loaded, get their categories and all notes */
+  /* Once user is loaded, fetch all their categories and notes */
   useEffect(() => {
     if (user) {
-      const _ = async function () {
+      ;(async function () {
         const categories = await findAllCategories(user.accessToken)
         const notes = await findAllNotes(user.accessToken)
         dispatch(initCategories(categories))
-        dispatch(loadNotes(notes))
-      }
-      _()
+        dispatch(addNotes(notes))
+      })()
     }
   }, [user])
 
@@ -53,6 +52,14 @@ function App() {
           element={
             <RequireAuth>
               <Home />
+            </RequireAuth>
+          }
+        />
+        <Route
+          path='/categories'
+          element={
+            <RequireAuth>
+              <Categories />
             </RequireAuth>
           }
         />

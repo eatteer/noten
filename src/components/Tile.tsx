@@ -1,15 +1,21 @@
 import { MouseEventHandler } from 'react'
 
 type Props = {
-  icon: JSX.Element
+  leftIcon?: JSX.Element
   title: string
+  rightIcon?: JSX.Element
   onClick: MouseEventHandler
 }
-export const Tile: React.FC<Props> = ({ icon, title, onClick }) => {
+export const Tile: React.FC<Props> = ({
+  leftIcon,
+  title,
+  rightIcon,
+  onClick,
+}) => {
   return (
     <div
       className='
-        flex items-center
+        flex justify-between items-center
         p-4
         font-medium
         border-b border-slate-200
@@ -17,8 +23,11 @@ export const Tile: React.FC<Props> = ({ icon, title, onClick }) => {
       '
       onClick={onClick}
     >
-      <span className='mr-2'>{icon}</span>
-      {title}
+      <div className='flex'>
+        {leftIcon && <span className='mr-2'>{leftIcon}</span>}
+        {title}
+      </div>
+      {rightIcon && <span className='ml-2'>{rightIcon}</span>}
     </div>
   )
 }

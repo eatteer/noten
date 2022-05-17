@@ -9,29 +9,54 @@ import { BiNote } from 'react-icons/bi'
 import { IoMdLogOut } from 'react-icons/io'
 import { GrMenu } from 'react-icons/gr'
 import { Tile } from './Tile'
-
 import { Category } from '../entities/Category'
 import { MdLabelOutline } from 'react-icons/md'
 import { Divider } from './Divider'
 import { AppStore } from '../redux/store'
 import { setCategoryFilter } from '../redux/category-filter/action-creators'
+import { useNavigate } from 'react-router-dom'
+import { findAllNotes, findNotesByKeyword } from '../services/notes-services'
+import { addNotes } from '../redux/notes/action-creators'
 
 export const Topbar: React.FC = () => {
-  console.log('Rendering topbar')
+  // console.log('Rendering Topbar') 
 
-  const dispatch = useDispatch()
-
-  const { isOpen, openDrawer, closeDrawer } = useDrawer()
+  /* Store */
   const store = useSelector<AppStore, AppStore>((store) => store)
-  const { user, categories } = store
+  const user = store.user!
+  const { categories, categoryFilter } = store
 
-  const handleLogout = () => {
+  /* Hooks */
+  const { isOpen, openDrawer, closeDrawer } = useDrawer()
+  const dispatch = useDispatch()
+  const navigate = useNavigate()
+
+  /* Handlers */
+  const onLogoutUser = () => {
     dispatch(logoutUser())
   }
 
-  const handleSetCategoryFilter = (category: Category | null) => {
-    closeDrawer()
+  const onDispatchCategoryFilter = async (category: Category | null) => {
     dispatch(setCategoryFilter(category))
+    /*
+      Required validation because Home useEffect fetchs notes when categoryFilter changes.
+
+      If a search is made while categoryFilter is null the next time
+      user selects Notes on Drawer, useEffect will note fetch notes
+      because categoryFilter has not changed.
+
+      The below condition fix that.
+    */
+    if (!categoryFilter) {
+      const notes = await findAllNotes(user.accessToken)
+      dispatch(addNotes(notes))
+    }
+    closeDrawer()
+  }
+
+  const onNavigateToCategories = () => {
+    closeDrawer()
+    setTimeout(() => navigate('/categories'), 400)
   }
 
   return (
@@ -42,13 +67,31 @@ export const Topbar: React.FC = () => {
           size={24}
           onClick={openDrawer}
         />
-        <Formik initialValues={{ keyword: '' }} onSubmit={(values) => {}}>
+        <Formik
+          initialValues={{ keyword: '' }}
+          validate={({ keyword }) => {
+            let errors: any = {}
+            if (!keyword) {
+              errors.keyword = 'Required'
+            }
+            return errors
+          }}
+          onSubmit={async ({ keyword }) => {
+            try {
+              const notes = await findNotesByKeyword(user.accessToken, keyword)
+              dispatch(addNotes(notes))
+            } catch (error) {
+              console.error(error)
+            }
+          }}
+        >
           {() => (
             <Form className='w-full'>
               <InputField
                 name='keyword'
                 type='text'
                 placeholder='Search a book'
+                showError={false}
               />
             </Form>
           )}
@@ -59,7 +102,7 @@ export const Topbar: React.FC = () => {
           <p
             className='
               p-4
-              text-2xl font-medium
+              text-2xl font-bold
               border-b border-slate-200
               last:border-0
             '
@@ -68,23 +111,28 @@ export const Topbar: React.FC = () => {
           </p>
           <div>
             <Tile
-              icon={<BiNote size={24} />}
+              leftIcon={<BiNote size={24} />}
               title='Notes'
-              onClick={() => handleSetCategoryFilter(null)}
+              onClick={() => onDispatchCategoryFilter(null)}
             />
           </div>
           <Divider />
           <div>
-            <h2 className='px-4 text-sm font-medium text-slate-600'>
-              Categories
-            </h2>
+            <div className='flex justify-between items-center'>
+              <h2 className='mx-4 text-sm font-medium text-slate-600'>
+                Categories
+              </h2>
+              <span className='badge mx-4' onClick={onNavigateToCategories}>
+                Edit
+              </span>
+            </div>
             <div>
               {categories.map((category: Category) => (
                 <Tile
                   key={category.id}
-                  icon={<MdLabelOutline size={24} />}
+                  leftIcon={<MdLabelOutline size={24} />}
                   title={category.name}
-                  onClick={() => handleSetCategoryFilter(category)}
+                  onClick={() => onDispatchCategoryFilter(category)}
                 />
               ))}
             </div>
@@ -92,14 +140,14 @@ export const Topbar: React.FC = () => {
           <Divider />
           <div>
             <Tile
-              icon={<IoMdLogOut size={24} />}
+              leftIcon={<IoMdLogOut size={24} />}
               title='Logout'
-              onClick={handleLogout}
+              onClick={onLogoutUser}
             />
             <Tile
-              icon={<IoSettingsOutline size={24} />}
+              leftIcon={<IoSettingsOutline size={24} />}
               title='Settings'
-              onClick={handleLogout}
+              onClick={onLogoutUser}
             />
           </div>
         </div>

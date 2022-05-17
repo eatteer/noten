@@ -9,11 +9,13 @@ import {
 } from '../services/users-services'
 
 export const SignUp = () => {
-  console.log('Rendering SignUp')
+  // console.log('Rendering SignUp') 
 
+  /* Hooks */
   const navigate = useNavigate()
 
-  const navigateToSignIn = () => {
+  /* Handlers */
+  const onNavigateToSignIn = () => {
     navigate('/signin')
   }
 
@@ -44,8 +46,8 @@ export const SignUp = () => {
         const { username, password } = values
         try {
           await registerUser(username, password)
-          toast.success('User created successfully', toastSuccessOptions)
-          navigateToSignIn()
+          toast.success('User created', toastSuccessOptions)
+          onNavigateToSignIn()
         } catch (error) {
           console.error(error)
         }
@@ -72,7 +74,7 @@ export const SignUp = () => {
             Already have an account?{' '}
             <span
               className='cursor-pointer font-medium text-blue-600'
-              onClick={navigateToSignIn}
+              onClick={onNavigateToSignIn}
             >
               Sign in
             </span>

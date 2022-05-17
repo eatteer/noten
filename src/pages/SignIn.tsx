@@ -8,16 +8,18 @@ import { loginUser } from '../redux/user/action-creators'
 import { auth } from '../services/users-services'
 
 export const SignIn = () => {
-  console.log('Rendering SignIn')
-  
+  // console.log('Rendering SignIn') 
+
+  /* Hooks */
   const dispatch = useDispatch()
   const navigate = useNavigate()
 
-  const navigateToSignUp = () => {
+  /* Handlers */
+  const onNavigateToSignUp = () => {
     navigate('/signup')
   }
 
-  const navigateToHome = () => {
+  const onNavigateToHome = () => {
     navigate('/')
   }
 
@@ -39,7 +41,7 @@ export const SignIn = () => {
         try {
           const user = await auth(username, password)
           dispatch(loginUser(user))
-          navigateToHome()
+          onNavigateToHome()
         } catch (error: any) {
           console.error(error.cause)
           toast.error(error.message, toastErrorOptions)
@@ -67,7 +69,7 @@ export const SignIn = () => {
             Don't have an account?{' '}
             <span
               className='cursor-pointer font-medium text-blue-600'
-              onClick={navigateToSignUp}
+              onClick={onNavigateToSignUp}
             >
               Sign up
             </span>

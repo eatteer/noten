@@ -3,33 +3,40 @@ import { IoIosAdd } from 'react-icons/io'
 import { useDispatch, useSelector } from 'react-redux'
 import { Topbar } from '../components/Topbar'
 import useModal from '../hooks/useModal'
-import { loadNotes } from '../redux/notes/action-creators'
+import { addNotes } from '../redux/notes/action-creators'
 import { AppStore } from '../redux/store'
-import { findAllNotes, findManyByCategory } from '../services/notes-services'
-import { CreateNoteModal } from './CreateNoteModal'
+import { findAllNotes, findNotesByCategory } from '../services/notes-services'
+import { CreateNote } from './CreateNote'
 import Masonry from 'react-masonry-css'
 import { Note } from '../entities/Note'
-import { NoteDetail } from './NoteDetailModal'
+import { NoteDetail } from './NoteDetail'
+import { Modal } from '../components/Modal'
 
 export const Home = () => {
-  console.log('Rendering Home')
+  // console.log('Rendering Home') 
 
-  const [note, setNote] = useState<Note | null>(null)
-
+  /* Store */
   const store = useSelector<AppStore, AppStore>((store) => store)
-  const { user, categoryFilter, notes } = store
+  const user = store.user!
+  const { categoryFilter, notes } = store
+
+  /* States */
+  const [note, setNote] = useState<Note>()
+
+  /* Hooks */
   const dispatch = useDispatch()
   const {
-    isOpen: isOpenCreateNoteModal,
-    openModal: openModalCreateNotaModal,
-    closeModal: closeModalCreateNoteModal,
+    isOpen: isOpenCreateNote,
+    openModal: openModalCreateNota,
+    closeModal: closeModalCreateNote,
   } = useModal()
   const {
-    isOpen: isOpenNoteDetailModal,
-    openModal: openNoteDetailModal,
-    closeModal: closeNoteDetailModal,
+    isOpen: isOpenNoteDetail,
+    openModal: openNoteDetail,
+    closeModal: closeNoteDetail,
   } = useModal()
 
+  /* Effects */
   useEffect(() => {
     /* Avoid to run effect if user does not exists */
     if (!user) return
@@ -38,7 +45,7 @@ export const Home = () => {
       ;(async function () {
         try {
           const notes = await findAllNotes(user.accessToken)
-          dispatch(loadNotes(notes))
+          dispatch(addNotes(notes))
         } catch (error) {
           console.error(error)
         }
@@ -48,11 +55,11 @@ export const Home = () => {
     if (categoryFilter) {
       ;(async function () {
         try {
-          const notes = await findManyByCategory(
+          const notes = await findNotesByCategory(
             user.accessToken,
             categoryFilter.id
           )
-          dispatch(loadNotes(notes))
+          dispatch(addNotes(notes))
         } catch (error) {
           console.error(error)
         }
@@ -60,9 +67,10 @@ export const Home = () => {
     }
   }, [categoryFilter])
 
-  const handleSetNote = (note: Note) => {
+  /* Handlers */
+  const onSetNote = (note: Note) => {
     setNote(note)
-    openNoteDetailModal()
+    openNoteDetail()
   }
 
   return (
@@ -70,14 +78,24 @@ export const Home = () => {
       {user && (
         <>
           <Topbar />
-          {notes.length === 0 && <div>Empty</div>}
+          {/* Empty notes */}
+          {/* {notes.length === 0 && (
+            <div className='p-4 text-center'>
+              <h2 className='text-2xl font-bold'>Nothing here</h2>
+              <p className='text-slate-600'>Try adding a new note</p>
+            </div>
+          )} */}
+          {/* Notes */}
           {notes.length > 0 && (
             <Masonry breakpointCols={{ default: 2 }} className='flex p-4 gap-2'>
               {notes.map((note) => (
                 <div
                   key={note.id}
-                  className='mb-2 last:mb-0 p-2 border rounded-md border-slate-300'
-                  onClick={() => handleSetNote(note)}
+                  className='
+                    mb-2 last:mb-0 p-2
+                    border rounded-md border-slate-300
+                  '
+                  onClick={() => onSetNote(note)}
                 >
                   <p className='text-sm font-bold'>{note.title}</p>
                   <p className='text-sm'>{note.description}</p>
@@ -86,22 +104,27 @@ export const Home = () => {
             </Masonry>
           )}
           <button
-            className='fixed bottom-4 right-4 p-2 rounded-full bg-blue-600 text-white'
-            onClick={openModalCreateNotaModal}
+            className='
+              fixed bottom-4 right-4
+              p-2
+              rounded-full 
+              bg-blue-600 text-white
+            '
+            onClick={openModalCreateNota}
           >
             <span>
               <IoIosAdd size={24} />
             </span>
           </button>
-          <CreateNoteModal
-            isOpen={isOpenCreateNoteModal}
-            closeModal={closeModalCreateNoteModal}
-          />
-          {/* <NoteDetail
-            note={note}
-            isOpen={isOpenNoteDetailModal}
-            closeModal={closeNoteDetailModal}
-          /> */}
+          {/* Create note modal */}
+          <Modal isOpen={isOpenCreateNote} closeModal={closeModalCreateNote}>
+            <CreateNote closeModal={closeModalCreateNote} />
+          </Modal>
+          {/* Note detail modal */}
+
+          <Modal isOpen={isOpenNoteDetail} closeModal={closeNoteDetail}>
+            <NoteDetail note={note!} closeModal={closeNoteDetail} />
+          </Modal>
         </>
       )}
     </>

@@ -8,7 +8,7 @@ import { Note } from "../entities/Note"
 import { notesReducer } from "./notes/reducer"
 
 export type AppStore = {
-  user: User
+  user: User | null
   categories: Category[]
   categoryFilter: Category | null
   notes: Note[]

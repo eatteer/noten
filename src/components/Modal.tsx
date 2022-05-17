@@ -1,4 +1,5 @@
 import { MouseEventHandler } from 'react'
+import { CSSTransition } from 'react-transition-group'
 import { GrFormClose } from 'react-icons/gr'
 
 type Props = {
@@ -8,56 +9,58 @@ type Props = {
 }
 
 export const Modal: React.FC<Props> = ({ isOpen, closeModal, children }) => {
-  const handleCloseModalOutside: MouseEventHandler = (event) => {
+  const onCloseModalOutside: MouseEventHandler = (event) => {
     if (event.target === event.currentTarget) {
       closeModal()
     }
   }
 
-  const handleCloseModal = () => {
+  const onCloseModal = () => {
     closeModal()
   }
 
   const isVisible = isOpen ? 'visible opacity-100' : 'invisible opacity-0'
-  const isOverlayVisible = isOpen ? 'translate-y-[0%]' : 'translate-y-[100%]'
 
   return (
+    /* Background */
     <div
       className={`
         z-20
         fixed top-0 left-0 bottom-0 right-0
         ${isVisible}
-        ease-in duration-500
+        ease-in duration-300
         touch-none
         bg-[#8d7979bd] backdrop-blur-sm
       `}
-      onClick={handleCloseModalOutside}
+      onClick={onCloseModalOutside}
     >
-      <div
-        className={`
-          z-30
-          fixed bottom-0
-          w-screen
-          ${isOverlayVisible}
-          ease-in-out duration-500 
-        `}
+      <CSSTransition
+        in={isOpen}
+        timeout={300}
+        classNames='modal-container'
+        unmountOnExit
       >
-        <div
-          className='
-            flex
-            p-2
-            rounded-tl-xl rounded-tr-xl
-            bg-white border-b border-b-gray-300
-          '
-        >
-          <GrFormClose
-            className='cursor-pointer'
-            size={24}
-            onClick={handleCloseModal}
-          />
+        {/* Container for animation */}
+        <div className='modal-container'>
+          {/* Header */}
+          <div
+            className='
+              flex
+              p-2
+              rounded-tl-xl rounded-tr-xl
+              bg-white border-b border-b-gray-300
+            '
+          >
+            <GrFormClose
+              className='cursor-pointer'
+              size={24}
+              onClick={onCloseModal}
+            />
+          </div>
+          {/* Content */}
+          <div className='bg-white'>{children}</div>
         </div>
-        <div className='bg-white'>{children}</div>
-      </div>
+      </CSSTransition>
     </div>
   )
 }

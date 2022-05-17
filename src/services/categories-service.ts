@@ -1,6 +1,5 @@
 import { CreateCategoryDto } from "../dto/CreateCategoryDto"
 import { Category } from "../entities/Category"
-
 const URL_API = process.env.REACT_APP_SERVER
 
 export const createCategory = async (accessToken: string, createCategoryDto: CreateCategoryDto): Promise<Category> => {
@@ -39,10 +38,10 @@ export const findAllCategories = async (accessToken: string): Promise<Category[]
   return categories
 }
 
-/* export const findByKeyword = async (accessToken: string, keyword: string): Promise<Category[]> => {
-  const endpoint = `${URL_API}/categories?keyword=${keyword}`
+export const removeCategoryById = async (accessToken: string, categoryId: number): Promise<Category> => {
+  const endpoint = `${URL_API}/categories/${categoryId}`
   const response = await fetch(endpoint, {
-    method: 'GET',
+    method: 'DELETE',
     headers: {
       'Authorization': `Bearer ${accessToken}`
     }
@@ -52,6 +51,6 @@ export const findAllCategories = async (accessToken: string): Promise<Category[]
     throw new Error(error.message, { cause: error })
 
   }
-  const categories = await response.json() as Category[]
-  return categories
-} */
+  const category = await response.json() as Category
+  return category
+}
