@@ -56,7 +56,12 @@ export const Topbar: React.FC = () => {
 
   const onNavigateToCategories = () => {
     closeDrawer()
-    setTimeout(() => navigate('/categories'), 400)
+    setTimeout(() => navigate('/categories'), 300)
+  }
+
+  const onNavigateToSettings = () => {
+    closeDrawer()
+    setTimeout(() => navigate('/settings'), 300)
   }
 
   return (
@@ -139,16 +144,16 @@ export const Topbar: React.FC = () => {
           </div>
           <Divider />
           <div>
+          <Tile
+              leftIcon={<IoSettingsOutline size={24} />}
+              title='Settings'
+              onClick={onNavigateToSettings}
+            />
             <Tile
               leftIcon={<IoMdLogOut size={24} />}
               title='Logout'
               onClick={onLogoutUser}
-            />
-            <Tile
-              leftIcon={<IoSettingsOutline size={24} />}
-              title='Settings'
-              onClick={onLogoutUser}
-            />
+            />     
           </div>
         </div>
       </Drawer>

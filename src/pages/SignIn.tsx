@@ -8,7 +8,7 @@ import { loginUser } from '../redux/user/action-creators'
 import { auth } from '../services/users-services'
 
 export const SignIn = () => {
-  // console.log('Rendering SignIn') 
+  // console.log('Rendering SignIn')
 
   /* Hooks */
   const dispatch = useDispatch()

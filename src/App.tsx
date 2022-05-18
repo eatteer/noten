@@ -15,9 +15,12 @@ import { RequireAuth } from './router/RequireAuth'
 import { findAllNotes } from './services/notes-services'
 import { addNotes } from './redux/notes/action-creators'
 import { Categories } from './pages/Categories'
+import { AvoidNavigateIfUser } from './router/AvoidNavigateIfUser'
+import { Settings } from './pages/Settings'
 
 function App() {
-  // console.log('Rendering App') 
+  // console.log('Rendering App')
+
   const user = useSelector<AppStore, User | null>((store) => store?.user)
   const dispatch = useDispatch()
 
@@ -44,6 +47,7 @@ function App() {
     }
   }, [user])
 
+  /* Navigate from address bar re-mount the App */
   return (
     <>
       <Routes>
@@ -63,8 +67,30 @@ function App() {
             </RequireAuth>
           }
         />
-        <Route path='/signin' element={<SignIn />} />
-        <Route path='/signup' element={<SignUp />} />
+        <Route
+          path='/signin'
+          element={
+            <AvoidNavigateIfUser>
+              <SignIn />
+            </AvoidNavigateIfUser>
+          }
+        />
+        <Route
+          path='/signup'
+          element={
+            <AvoidNavigateIfUser>
+              <SignUp />
+            </AvoidNavigateIfUser>
+          }
+        />
+        <Route
+          path='/settings'
+          element={
+            <RequireAuth>
+              <Settings />
+            </RequireAuth>
+          }
+        />
       </Routes>
       <ToastContainer />
     </>
