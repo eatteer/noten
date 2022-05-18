@@ -1,10 +1,13 @@
+import { useRef } from 'react'
 import { BiTrashAlt } from 'react-icons/bi'
 import { IoArrowBackOutline } from 'react-icons/io5'
 import { MdLabelOutline } from 'react-icons/md'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
+import { Modal } from '../components/Modal'
 import { Tile } from '../components/Tile'
 import { Category } from '../entities/Category'
+import useModal from '../hooks/useModal'
 import { removeCategory } from '../redux/categories/action-creators'
 import { setCategoryFilter } from '../redux/category-filter/action-creators'
 import { AppStore } from '../redux/store'
@@ -16,16 +19,30 @@ export const Categories: React.FC = () => {
   const { categories } = store
 
   /* Hooks */
+  const categoryRef = useRef<Category>()
   const navigate = useNavigate()
   const dispatch = useDispatch()
 
+  const {
+    isOpen: isOpenDeleteCategory,
+    openModal: openDeleteCategory,
+    closeModal: closeDeleteCategory,
+  } = useModal()
+
   /* Handlers */
-  const onRemoveCategory = async (category: Category) => {
+  const onOpenDeleteCategory = (category: Category) => {
+    categoryRef.current = category
+    openDeleteCategory()
+  }
+
+  const onRemoveCategory = async () => {
+    const category = categoryRef.current
     const removedCategory = await removeCategoryById(
       user.accessToken,
-      category.id
+      category!.id
     )
     dispatch(removeCategory(removedCategory))
+    closeDeleteCategory()
   }
 
   const onNavigateBack = () => {
@@ -50,7 +67,7 @@ export const Categories: React.FC = () => {
             category.name !== 'Others' ? (
               <BiTrashAlt
                 size={24}
-                onClick={() => onRemoveCategory(category)}
+                onClick={() => onOpenDeleteCategory(category)}
               />
             ) : undefined
           return (
@@ -64,6 +81,23 @@ export const Categories: React.FC = () => {
           )
         })}
       </div>
+      <Modal isOpen={isOpenDeleteCategory} closeModal={closeDeleteCategory}>
+        <div className='p-4'>
+          <h2 className='text-xl font-bold mb-4'>Delete category</h2>
+          <h2 className='mb-8'>
+            Are you sure you want to delete this category? Your notes won't be
+            deleted
+          </h2>
+          <div className='flex justify-end items-center space-x-4'>
+            <button className='button light' onClick={closeDeleteCategory}>
+              Cancel
+            </button>
+            <button className='button danger' onClick={onRemoveCategory}>
+              Confirm
+            </button>
+          </div>
+        </div>
+      </Modal>
     </>
   )
 }

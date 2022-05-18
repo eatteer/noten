@@ -10,7 +10,7 @@ import { CreateNote } from './CreateNote'
 import Masonry from 'react-masonry-css'
 import { Note } from '../entities/Note'
 import { NoteDetail } from './NoteDetail'
-import { Modal } from '../components/Modal'
+import { BottomModal } from '../components/BottomModal'
 
 export const Home = () => {
   // console.log('Rendering Home') 
@@ -117,14 +117,14 @@ export const Home = () => {
             </span>
           </button>
           {/* Create note modal */}
-          <Modal isOpen={isOpenCreateNote} closeModal={closeModalCreateNote}>
+          <BottomModal isOpen={isOpenCreateNote} closeModal={closeModalCreateNote}>
             <CreateNote closeModal={closeModalCreateNote} />
-          </Modal>
+          </BottomModal>
           {/* Note detail modal */}
 
-          <Modal isOpen={isOpenNoteDetail} closeModal={closeNoteDetail}>
+          <BottomModal isOpen={isOpenNoteDetail} closeModal={closeNoteDetail}>
             <NoteDetail note={note!} closeModal={closeNoteDetail} />
-          </Modal>
+          </BottomModal>
         </>
       )}
     </>

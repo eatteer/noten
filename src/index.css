@@ -30,8 +30,16 @@
     rounded-md;
   }
 
-  .button.primary {
+  .primary {
     @apply bg-blue-600 hover:bg-blue-700 text-white;
+  }
+
+  .danger {
+    @apply bg-pink-600 hover:bg-pink-700 text-white;
+  }
+
+  .light {
+    @apply bg-slate-50 hover:bg-slate-100 text-black;
   }
 
   .badge {
@@ -80,6 +88,13 @@ code {
 
 .modal-container {
   position: fixed;
+  margin: 16px;
+  background-color: white;
+  border-radius: 12px;
+}
+
+.bottom-modal-container {
+  position: fixed;
   bottom: 0;
   width: 100%;
   background-color: white;
@@ -87,20 +102,20 @@ code {
   border-top-right-radius: 12px;
 }
 
-.modal-container-enter {
+.bottom-modal-container-enter {
   transform: translateY(100%);
 }
 
-.modal-container-enter-active {
+.bottom-modal-container-enter-active {
   transform: translateY(0%);
   transition: transform 300ms ease-in-out;
 }
 
-.modal-container-exit {
+.bottom-modal-container-exit {
   transform: translateY(0%);
 }
 
-.modal-container-exit-active {
+.bottom-modal-container-exit-active {
   transform: translateY(100%);
   transition: transform 300ms ease-in-out;
 }

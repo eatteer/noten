@@ -10,7 +10,7 @@ import { AppStore } from '../redux/store'
 import { addNote } from '../redux/notes/action-creators'
 import { IoIosAddCircleOutline } from 'react-icons/io'
 import { MdLabelOutline } from 'react-icons/md'
-import { Modal } from '../components/Modal'
+import { BottomModal } from '../components/BottomModal'
 
 type Props = {
   closeModal: () => void
@@ -127,12 +127,12 @@ export const CreateNote: React.FC<Props> = ({ closeModal }) => {
             </div>
           </Form>
           {/* Categories modal */}
-          <Modal isOpen={isOpenCategories} closeModal={closeCategories}>
+          <BottomModal isOpen={isOpenCategories} closeModal={closeCategories}>
             <SelectCategory
               closeModal={closeCategories}
               setCategory={setCategory}
             />
-          </Modal>
+          </BottomModal>
         </>
       )}
     </Formik>

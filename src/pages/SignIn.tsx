@@ -5,7 +5,7 @@ import { toast } from 'react-toastify'
 import { InputField } from '../components/InputField'
 import { toastErrorOptions } from '../components/toast/options'
 import { loginUser } from '../redux/user/action-creators'
-import { auth } from '../services/users-services'
+import { authUser } from '../services/users-services'
 
 export const SignIn = () => {
   // console.log('Rendering SignIn')
@@ -39,7 +39,7 @@ export const SignIn = () => {
       onSubmit={async (values) => {
         const { username, password } = values
         try {
-          const user = await auth(username, password)
+          const user = await authUser(username, password)
           dispatch(loginUser(user))
           onNavigateToHome()
         } catch (error: any) {

@@ -8,7 +8,7 @@ type Props = {
   children: JSX.Element | JSX.Element[]
 }
 
-export const Modal: React.FC<Props> = ({ isOpen, closeModal, children }) => {
+export const BottomModal: React.FC<Props> = ({ isOpen, closeModal, children }) => {
   const onCloseModalOutside: MouseEventHandler = (event) => {
     if (event.target === event.currentTarget) {
       closeModal()
@@ -27,7 +27,6 @@ export const Modal: React.FC<Props> = ({ isOpen, closeModal, children }) => {
       className={`
         z-20
         fixed top-0 left-0 bottom-0 right-0
-        flex justify-center items-center
         ${isVisible}
         ease-in duration-300
         touch-none
@@ -38,11 +37,11 @@ export const Modal: React.FC<Props> = ({ isOpen, closeModal, children }) => {
       <CSSTransition
         in={isOpen}
         timeout={300}
-        classNames='modal-container'
+        classNames='bottom-modal-container'
         unmountOnExit
       >
         {/* Container for animation */}
-        <div className='modal-container'>
+        <div className='bottom-modal-container'>
           {/* Header */}
           <div
             className='
@@ -59,7 +58,7 @@ export const Modal: React.FC<Props> = ({ isOpen, closeModal, children }) => {
             />
           </div>
           {/* Content */}
-          <div className='bg-white rounded-xl'>{children}</div>
+          <div className='bg-white'>{children}</div>
         </div>
       </CSSTransition>
     </div>

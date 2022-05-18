@@ -4,6 +4,7 @@ import { BiTrashAlt } from 'react-icons/bi'
 import { IoIosAddCircleOutline } from 'react-icons/io'
 import { MdLabelOutline } from 'react-icons/md'
 import { useDispatch, useSelector } from 'react-redux'
+import { BottomModal } from '../components/BottomModal'
 import { Modal } from '../components/Modal'
 import { UpdateNoteDto } from '../dto/UpdateNoteDto'
 import { Category } from '../entities/Category'
@@ -28,13 +29,19 @@ export const NoteDetail: React.FC<Props> = ({ note, closeModal }) => {
   const dispatch = useDispatch()
   const [category, setCategory] = useState<Category>(note.category)
 
-  /* Handlers */
   const {
-    isOpen: isOpenCategoriesModal,
-    openModal: openCategoriesModal,
-    closeModal: closeCategoriesModal,
+    isOpen: isOpenDeleteNote,
+    openModal: openDeleteNote,
+    closeModal: closeDeleteNote,
   } = useModal()
 
+  const {
+    isOpen: isOpenCategories,
+    openModal: openCategories,
+    closeModal: closeCategories,
+  } = useModal()
+
+  /* Handlers */
   const onRemoveNote = async () => {
     const removedNote = await removeNoteById(user.accessToken, note.id)
     dispatch(removeNote(removedNote))
@@ -114,7 +121,7 @@ export const NoteDetail: React.FC<Props> = ({ note, closeModal }) => {
             </Field>
             <div
               className='flex items-center justify-between p-4'
-              onClick={openCategoriesModal}
+              onClick={openCategories}
             >
               <div className='flex'>
                 <MdLabelOutline className='mr-4' size={24} />
@@ -129,22 +136,36 @@ export const NoteDetail: React.FC<Props> = ({ note, closeModal }) => {
                   border-t border-slate-300
                 '
             >
-              <BiTrashAlt size={24} onClick={onRemoveNote} />
+              <BiTrashAlt size={24} onClick={openDeleteNote} />
               <button className='button primary' type='submit'>
                 Edit note
               </button>
             </div>
           </Form>
 
-          <Modal
-            isOpen={isOpenCategoriesModal}
-            closeModal={closeCategoriesModal}
-          >
+          <Modal isOpen={isOpenDeleteNote} closeModal={closeDeleteNote}>
+            <div className='p-4'>
+              <h2 className='text-xl font-bold mb-4'>Delete note</h2>
+              <h2 className='mb-8'>
+                Are you sure you want to delete this note?
+              </h2>
+              <div className='flex justify-end items-center space-x-4'>
+                <button className='button light' onClick={closeDeleteNote}>
+                  Cancel
+                </button>
+                <button className='button danger' onClick={onRemoveNote}>
+                  Confirm
+                </button>
+              </div>
+            </div>
+          </Modal>
+
+          <BottomModal isOpen={isOpenCategories} closeModal={closeCategories}>
             <SelectCategory
-              closeModal={closeCategoriesModal}
+              closeModal={closeCategories}
               setCategory={setCategory}
             />
-          </Modal>
+          </BottomModal>
         </>
       )}
     </Formik>

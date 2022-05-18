@@ -27,7 +27,7 @@ export const determineUserExistenceByUsername = async (username: string): Promis
   throw new Error(error.message, { cause: error })
 }
 
-export const auth = async (username: string, password: string): Promise<User> => {
+export const authUser = async (username: string, password: string): Promise<User> => {
   const endpoint = `${URL_API}/auth/login`
   const response = await fetch(endpoint, {
     method: 'POST',
@@ -42,4 +42,21 @@ export const auth = async (username: string, password: string): Promise<User> =>
   }
   const error = await response.json()
   throw new Error(error.message, { cause: error })
+}
+
+export const removeUser = async (accessToken: string): Promise<User> => {
+  const endpoint = `${URL_API}/users`
+  const response = await fetch(endpoint, {
+    method: 'DELETE',
+    headers: {
+      'Authorization': `Bearer ${accessToken}`,
+    },
+  })
+  if (!response.ok) {
+    const error = await response.json()
+    throw new Error(error.message, { cause: error })
+
+  }
+  const user = await response.json() as User
+  return user
 }
