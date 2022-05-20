@@ -97,6 +97,7 @@ export const Topbar: React.FC = () => {
                 type='text'
                 placeholder='Search a book'
                 showError={false}
+                autoComplete='off'
               />
             </Form>
           )}

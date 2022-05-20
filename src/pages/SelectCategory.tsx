@@ -81,6 +81,7 @@ export const SelectCategory: React.FC<Props> = ({ closeModal, setCategory }) => 
         '
         name='keyword'
         placeholder='Enter category name'
+        autoComplete='off'
         value={categoryName}
         onChange={onChangeCategoryName}
         onKeyUp={onKeyUpCategoryName}

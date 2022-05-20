@@ -1,11 +1,10 @@
 import { CreateNoteDto } from "../dto/CreateNoteDto"
 import { UpdateNoteDto } from "../dto/UpdateNoteDto"
 import { Note } from "../entities/Note"
-
-const URL_API = process.env.REACT_APP_SERVER
+import { API_URL } from "../globals"
 
 export const createNote = async (accessToken: string, createNoteDto: CreateNoteDto): Promise<Note> => {
-  const endpoint = `${URL_API}/notes`
+  const endpoint = `${API_URL}/notes`
   const response = await fetch(endpoint, {
     method: 'POST',
     headers: {
@@ -24,7 +23,7 @@ export const createNote = async (accessToken: string, createNoteDto: CreateNoteD
 }
 
 export const findNotesByCategory = async (accessToken: string, categoryId: number): Promise<Note[]> => {
-  const endpoint = `${URL_API}/notes?categoryId=${categoryId}`
+  const endpoint = `${API_URL}/notes?categoryId=${categoryId}`
   const response = await fetch(endpoint, {
     method: 'GET',
     headers: {
@@ -42,7 +41,7 @@ export const findNotesByCategory = async (accessToken: string, categoryId: numbe
 
 
 export const findAllNotes = async (accessToken: string): Promise<Note[]> => {
-  const endpoint = `${URL_API}/notes`
+  const endpoint = `${API_URL}/notes`
   const response = await fetch(endpoint, {
     method: 'GET',
     headers: {
@@ -59,7 +58,7 @@ export const findAllNotes = async (accessToken: string): Promise<Note[]> => {
 }
 
 export const findNotesByKeyword = async (accessToken: string, keyword: string): Promise<Note[]> => {
-  const endpoint = `${URL_API}/notes?keyword=${keyword}`
+  const endpoint = `${API_URL}/notes?keyword=${keyword}`
   const response = await fetch(endpoint, {
     method: 'GET',
     headers: {
@@ -76,7 +75,7 @@ export const findNotesByKeyword = async (accessToken: string, keyword: string): 
 }
 
 export const updateNoteById = async (accessToken: string, noteId: number, updateNoteDto: UpdateNoteDto): Promise<Note> => {
-  const endpoint = `${URL_API}/notes/${noteId}`
+  const endpoint = `${API_URL}/notes/${noteId}`
   const response = await fetch(endpoint, {
     method: 'PUT',
     headers: {
@@ -95,7 +94,7 @@ export const updateNoteById = async (accessToken: string, noteId: number, update
 }
 
 export const removeNoteById = async (accessToken: string, noteId: number): Promise<Note> => {
-  const endpoint = `${URL_API}/notes/${noteId}`
+  const endpoint = `${API_URL}/notes/${noteId}`
   const response = await fetch(endpoint, {
     method: 'DELETE',
     headers: {

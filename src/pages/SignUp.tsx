@@ -9,7 +9,7 @@ import {
 } from '../services/users-services'
 
 export const SignUp = () => {
-  // console.log('Rendering SignUp') 
+  // console.log('Rendering SignUp')
 
   /* Hooks */
   const navigate = useNavigate()
@@ -46,7 +46,7 @@ export const SignUp = () => {
         const { username, password } = values
         try {
           await registerUser(username, password)
-          toast.success('User created', toastSuccessOptions)
+          toast.success('User created successfully', toastSuccessOptions)
           onNavigateToSignIn()
         } catch (error) {
           console.error(error)
@@ -60,11 +60,16 @@ export const SignUp = () => {
             Create a free account
           </h3>
           <div className='space-y-4'>
-            <InputField name='username' placeholder='Username' />
+            <InputField
+              name='username'
+              placeholder='Username'
+              autoComplete='off'
+            />
             <InputField
               name='password'
               type='password'
               placeholder='Password'
+              autoComplete='off'
             />
             <button className='button primary w-full' type='submit'>
               Sign up

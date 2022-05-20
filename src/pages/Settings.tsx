@@ -50,7 +50,7 @@ export const Settings: FC = () => {
       />
       <Modal isOpen={isOpen} closeModal={closeModal}>
         <div className='p-4'>
-          <h2 className='text-xl font-bold mb-4'>Delete account</h2>
+          <h2 className='text-xl font-bold'>Delete account</h2>
           <h2 className='mb-8'>
             Are you sure you want to delete your account?
           </h2>

@@ -83,7 +83,7 @@ export const Categories: React.FC = () => {
       </div>
       <Modal isOpen={isOpenDeleteCategory} closeModal={closeDeleteCategory}>
         <div className='p-4'>
-          <h2 className='text-xl font-bold mb-4'>Delete category</h2>
+          <h2 className='text-xl font-bold'>Delete category</h2>
           <h2 className='mb-8'>
             Are you sure you want to delete this category? Your notes won't be
             deleted

@@ -87,6 +87,7 @@ export const CreateNote: React.FC<Props> = ({ closeModal }) => {
                       ${styleInputError}
                     `}
                     placeholder='Title'
+                    autoComplete='off'
                     {...field}
                   />
                 )
@@ -105,6 +106,7 @@ export const CreateNote: React.FC<Props> = ({ closeModal }) => {
                       ${styleInputError}
                     `}
                     placeholder='Description...'
+                    autoComplete='off'
                     {...field}
                   />
                 )

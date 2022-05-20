@@ -1,9 +1,9 @@
 import { CreateCategoryDto } from "../dto/CreateCategoryDto"
 import { Category } from "../entities/Category"
-const URL_API = process.env.REACT_APP_SERVER
+import { API_URL } from "../globals"
 
 export const createCategory = async (accessToken: string, createCategoryDto: CreateCategoryDto): Promise<Category> => {
-  const endpoint = `${URL_API}/categories`
+  const endpoint = `${API_URL}/categories`
   const response = await fetch(endpoint, {
     method: 'POST',
     headers: {
@@ -22,7 +22,7 @@ export const createCategory = async (accessToken: string, createCategoryDto: Cre
 }
 
 export const findAllCategories = async (accessToken: string): Promise<Category[]> => {
-  const endpoint = `${URL_API}/categories`
+  const endpoint = `${API_URL}/categories`
   const response = await fetch(endpoint, {
     method: 'GET',
     headers: {
@@ -39,7 +39,7 @@ export const findAllCategories = async (accessToken: string): Promise<Category[]
 }
 
 export const removeCategoryById = async (accessToken: string, categoryId: number): Promise<Category> => {
-  const endpoint = `${URL_API}/categories/${categoryId}`
+  const endpoint = `${API_URL}/categories/${categoryId}`
   const response = await fetch(endpoint, {
     method: 'DELETE',
     headers: {
