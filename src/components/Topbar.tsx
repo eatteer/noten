@@ -95,7 +95,7 @@ export const Topbar: React.FC = () => {
               <InputField
                 name='keyword'
                 type='text'
-                placeholder='Search a book'
+                placeholder='Search a note'
                 showError={false}
                 autoComplete='off'
               />
